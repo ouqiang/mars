@@ -1,0 +1,7 @@
+[app]
+env = "dev"
+host = "0.0.0.0"
+proxyPort = 8888
+inspectorPort = 9999
+
+
