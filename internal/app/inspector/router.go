@@ -4,6 +4,8 @@ package inspector
 import (
 	"net/http"
 
+	"github.com/ouqiang/mars/internal/app/inspector/controller"
+
 	"github.com/ouqiang/mars/internal/app/inject"
 )
 
@@ -23,5 +25,8 @@ func NewRouter(container *inject.Container) *Router {
 
 // Register 路由注册
 func (r *Router) Register(mux *http.ServeMux) {
+	c := controller.NewInspector(r.container.TxStorage)
 
+	mux.HandleFunc("/ws", c.WebSocket)
+	mux.HandleFunc("/get-transaction", c.GetTransaction)
 }

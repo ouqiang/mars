@@ -8,8 +8,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ouqiang/goproxy"
-
 	"github.com/ouqiang/mars/internal/app/inspector"
 
 	log "github.com/sirupsen/logrus"
@@ -49,9 +47,9 @@ func (app *App) Run() {
 // 启动代理server
 func (app *App) startProxyServer() {
 	addr := app.container.Conf.App.ProxyAddr()
-	handler := goproxy.New()
 	server := &http.Server{
-		Handler:      handler,
+		Addr:         addr,
+		Handler:      app.container.Proxy,
 		ReadTimeout:  proxyServerReadTimeout,
 		WriteTimeout: proxyServerWriteTimeout,
 	}
@@ -64,7 +62,7 @@ func (app *App) startProxyServer() {
 
 // 启动流量审查server
 func (app *App) startInspectorServer() {
-	new(inspector.Router).Register(http.DefaultServeMux)
+	inspector.NewRouter(app.container).Register(http.DefaultServeMux)
 	addr := app.container.Conf.App.InspectorAddr()
 	server := &http.Server{
 		Addr:         addr,

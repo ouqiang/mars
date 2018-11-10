@@ -5,3 +5,12 @@ proxyPort = 8888
 inspectorPort = 9999
 
 
+[mitmProxy]
+# 是否开启中间人代理
+enabled = true
+# 是否解密HTTPS, 客户端系统需安装根证书
+decryptHTTPS = true
+# 证书缓存大小
+certCacheSize = 1000
+# 数据缓存大小
+leveldbCacheSize = 1000
