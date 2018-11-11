@@ -12,7 +12,7 @@ COPY . .
 RUN chown -R app:app ./
 
 EXPOSE 8888
-EXPOSE 8889
+EXPOSE 9999
 
 USER app
 

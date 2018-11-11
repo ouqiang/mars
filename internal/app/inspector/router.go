@@ -14,7 +14,7 @@ type Router struct {
 	container *inject.Container
 }
 
-// NewRouter 创建路由管理器
+// NewRouter 创建Router
 func NewRouter(container *inject.Container) *Router {
 	r := &Router{
 		container: container,
@@ -25,8 +25,7 @@ func NewRouter(container *inject.Container) *Router {
 
 // Register 路由注册
 func (r *Router) Register(mux *http.ServeMux) {
-	c := controller.NewInspector(r.container.TxStorage)
+	c := controller.NewInspector()
 
 	mux.HandleFunc("/ws", c.WebSocket)
-	mux.HandleFunc("/get-transaction", c.GetTransaction)
 }

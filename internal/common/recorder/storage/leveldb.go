@@ -26,9 +26,14 @@ func NewLevelDB(db *leveldb.DB, queue *common.Queue) *LevelDB {
 	return l
 }
 
+// GetBytes 获取transaction序列化的bytes
+func (l *LevelDB) GetBytes(txId string) ([]byte, error) {
+	return l.db.Get([]byte(txId), nil)
+}
+
 // Get 获取transaction
 func (l *LevelDB) Get(txId string) (*recorder.Transaction, error) {
-	data, err := l.db.Get([]byte(txId), nil)
+	data, err := l.GetBytes(txId)
 	if err != nil {
 		return nil, err
 	}
@@ -41,8 +46,8 @@ func (l *LevelDB) Get(txId string) (*recorder.Transaction, error) {
 	return tx, nil
 }
 
-// Save 保存transaction
-func (l *LevelDB) Save(tx *recorder.Transaction) error {
+// Put 保存transaction
+func (l *LevelDB) Put(tx *recorder.Transaction) error {
 	if tx == nil {
 		return errors.New("transaction is nil")
 	}

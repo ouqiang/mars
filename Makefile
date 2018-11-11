@@ -22,10 +22,10 @@ enable-race:
 	$(eval RACE = -race)
 
 package: build-vue statik
-	bash ./package.sh
+	bash ./script/package.sh
 
 package-all: build-vue statik
-	bash ./package.sh -p 'linux darwin windows'
+	bash ./script/package.sh -p 'linux darwin windows'
 
 build-vue:
 	cd web/vue && yarn run build

@@ -5,24 +5,27 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ouqiang/mars/internal/common/output"
+	"github.com/ouqiang/mars/internal/common/recorder/interceptor"
+
+	"github.com/ouqiang/mars/internal/common/recorder/output"
 
 	"github.com/ouqiang/goproxy"
 	"github.com/ouqiang/mars/internal/app/config"
 	"github.com/ouqiang/mars/internal/common"
 	"github.com/ouqiang/mars/internal/common/recorder"
-	"github.com/ouqiang/mars/internal/common/storage"
+	"github.com/ouqiang/mars/internal/common/recorder/storage"
 	log "github.com/sirupsen/logrus"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
 // Container 容器
 type Container struct {
-	Conf       *config.Config
-	Proxy      *goproxy.Proxy
-	TxStorage  recorder.Storage
-	txRecorder *recorder.Recorder
-	txOutput   recorder.Output
+	Conf           *config.Config
+	Proxy          *goproxy.Proxy
+	TxStorage      recorder.Storage
+	txRecorder     *recorder.Recorder
+	txOutput       recorder.Output
+	txInterceptors []recorder.Interceptor
 }
 
 // NewContainer 创建容器
@@ -35,18 +38,21 @@ func NewContainer(conf *config.Config) *Container {
 		txRecorder: recorder.NewRecorder(),
 	}
 	c.createProxy()
-	c.createTransactionStorage()
-	c.createTransactionOutput()
+	c.createRecorderStorage()
+	c.createRecorderOutput()
+	c.createRecorderInterceptor()
 
 	c.txRecorder.SetProxy(c.Proxy)
 	c.txRecorder.SetStorage(c.TxStorage)
 	c.txRecorder.SetOutput(c.txOutput)
+	c.txRecorder.SetInterceptors(c.txInterceptors)
 
 	return c
 }
 
 func (c *Container) createProxy() {
-	opts := make([]goproxy.Option, 0, 2)
+	opts := make([]goproxy.Option, 0, 3)
+	opts = append(opts, goproxy.WithDisableKeepAlive(true))
 	if c.Conf.MITMProxy.Enabled {
 		opts = append(opts, goproxy.WithDelegate(c.txRecorder))
 	}
@@ -58,7 +64,7 @@ func (c *Container) createProxy() {
 	c.Proxy = goproxy.New(opts...)
 }
 
-func (c *Container) createTransactionStorage() {
+func (c *Container) createRecorderStorage() {
 	if !c.Conf.MITMProxy.Enabled {
 		return
 	}
@@ -80,6 +86,10 @@ func (c *Container) createTransactionStorage() {
 	c.TxStorage = storage.NewLevelDB(db, queue)
 }
 
-func (c *Container) createTransactionOutput() {
+func (c *Container) createRecorderOutput() {
 	c.txOutput = output.NewConsole()
+}
+
+func (c *Container) createRecorderInterceptor() {
+	c.txInterceptors = interceptor.Handlers
 }

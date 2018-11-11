@@ -29,7 +29,9 @@ func (q *Queue) Add(value interface{}) (removeValue interface{}) {
 
 	if q.bucket.Len() == q.maxSize {
 		firstEle := q.bucket.Front()
-		removeValue = q.bucket.Remove(firstEle)
+		if firstEle != nil {
+			removeValue = q.bucket.Remove(firstEle)
+		}
 	}
 
 	q.bucket.PushBack(value)

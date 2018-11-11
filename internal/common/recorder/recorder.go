@@ -16,7 +16,8 @@ import (
 // Storage 存取transaction接口
 type Storage interface {
 	Get(txId string) (*Transaction, error)
-	Save(*Transaction) error
+	GetBytes(txId string) ([]byte, error)
+	Put(*Transaction) error
 }
 
 // Output 输出transaction接口
@@ -24,11 +25,22 @@ type Output interface {
 	Write(*Transaction) error
 }
 
+// Interceptor 拦截器
+type Interceptor interface {
+	// Connect 收到客户端连接, 自定义response返回, 只支持HTTP
+	Connect(ctx *goproxy.Context, rw http.ResponseWriter)
+	// BeforeRequest 请求发送前, 修改request
+	BeforeRequest(ctx *goproxy.Context)
+	// BeforeResponse 响应发送前, 修改response
+	BeforeResponse(ctx *goproxy.Context, resp *http.Response, err error)
+}
+
 // Recorder 记录http transaction
 type Recorder struct {
-	proxy   *goproxy.Proxy
-	storage Storage
-	output  Output
+	proxy        *goproxy.Proxy
+	storage      Storage
+	output       Output
+	interceptors []Interceptor
 }
 
 // NewRecorder 创建recorder
@@ -53,14 +65,30 @@ func (r *Recorder) SetOutput(o Output) {
 	r.output = o
 }
 
+// SetInterceptors 设置拦截器
+func (r *Recorder) SetInterceptors(i []Interceptor) {
+	r.interceptors = i
+}
+
 // Connect 收到客户端连接
-func (r *Recorder) Connect(ctx *goproxy.Context, rw http.ResponseWriter) {}
+func (r *Recorder) Connect(ctx *goproxy.Context, rw http.ResponseWriter) {
+	if len(r.interceptors) > 0 {
+		for _, item := range r.interceptors {
+			item.Connect(ctx, rw)
+		}
+	}
+}
 
 // Auth 代理身份认证
 func (r *Recorder) Auth(ctx *goproxy.Context, rw http.ResponseWriter) {}
 
 // BeforeRequest 请求发送前处理
 func (r *Recorder) BeforeRequest(ctx *goproxy.Context) {
+	if len(r.interceptors) > 0 {
+		for _, item := range r.interceptors {
+			item.BeforeRequest(ctx)
+		}
+	}
 	tx := NewTransaction()
 	tx.ClientIP, _, _ = net.SplitHostPort(ctx.Req.RemoteAddr)
 	tx.StartTime = time.Now()
@@ -79,6 +107,11 @@ func (r *Recorder) BeforeRequest(ctx *goproxy.Context) {
 
 // BeforeResponse 响应发送前处理
 func (r *Recorder) BeforeResponse(ctx *goproxy.Context, resp *http.Response, err error) {
+	if len(r.interceptors) > 0 {
+		for _, item := range r.interceptors {
+			item.BeforeResponse(ctx, resp, err)
+		}
+	}
 	tx := ctx.Data["tx"].(*Transaction)
 	tx.Duration = time.Now().Sub(tx.StartTime)
 
@@ -96,9 +129,12 @@ func (r *Recorder) Finish(ctx *goproxy.Context) {
 	if !ok {
 		return
 	}
-	tx := value.(*Transaction)
+	tx, ok := value.(*Transaction)
+	if !ok {
+		return
+	}
 	if r.storage != nil {
-		err := r.storage.Save(tx)
+		err := r.storage.Put(tx)
 		if err != nil {
 			log.Warnf("请求结束#保存transaction错误: [%s] %s", ctx.Req.URL.String(), err)
 		}
@@ -128,13 +164,19 @@ func (r *Recorder) Replay(txId string) error {
 		return fmt.Errorf("回放#创建请求错误: [txId: %s] %s", txId, err)
 	}
 	newReq.RemoteAddr = tx.ClientIP + ":80"
-	go func() {
-		ctx := &goproxy.Context{
-			Req: newReq,
-		}
-		r.proxy.DoRequest(ctx, func(resp *http.Response, e error) {})
-		r.Finish(ctx)
-	}()
+	go r.DoRequest(newReq)
 
 	return nil
+}
+
+// DoRequest 执行请求
+func (r *Recorder) DoRequest(req *http.Request) {
+	if req == nil {
+		panic("request is nil")
+	}
+	ctx := &goproxy.Context{
+		Req: req,
+	}
+	r.proxy.DoRequest(ctx, func(resp *http.Response, e error) {})
+	r.Finish(ctx)
 }

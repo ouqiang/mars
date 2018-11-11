@@ -102,7 +102,7 @@ init() {
         VERSION=`git_latest_tag`
     fi
     GIT_COMMIT_ID=`git_latest_commit`
-    LDFLAGS="-w -X 'main.AppVersion=${VERSION}' -X 'main.BuildDate=`date '+%Y-%m-%d %H:%M:%S'`' -X 'main.GitCommit=${GIT_COMMIT_ID}'"
+    LDFLAGS="-s -w -X 'main.AppVersion=${VERSION}' -X 'main.BuildDate=`date '+%Y-%m-%d %H:%M:%S'`' -X 'main.GitCommit=${GIT_COMMIT_ID}'"
  
     PACKAGE_DIR=${BINARY_NAME}-package
     BUILD_DIR=${BINARY_NAME}-build
