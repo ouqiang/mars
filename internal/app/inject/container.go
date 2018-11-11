@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ouqiang/mars/internal/common/recorder/interceptor"
+	"github.com/ouqiang/mars/interceptor"
 
 	"github.com/ouqiang/mars/internal/common/recorder/output"
 

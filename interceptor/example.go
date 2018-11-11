@@ -20,6 +20,7 @@ func (Example) Connect(ctx *goproxy.Context, rw http.ResponseWriter) {
 	if strings.Contains(ctx.Req.URL.Host, "crashlytics.com") {
 		rw.WriteHeader(http.StatusForbidden)
 		ctx.Abort()
+		return
 	}
 	io.WriteString(rw, "修改后的内容")
 	ctx.Abort()
