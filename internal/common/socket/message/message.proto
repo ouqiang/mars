@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package message;
+
+import "google/protobuf/any.proto";
+
+// 消息
+message Message {
+    int32 type = 1; // 消息类型
+    google.protobuf.Any payload = 2; // 消息体
+}

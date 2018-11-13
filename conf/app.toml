@@ -6,7 +6,7 @@ inspectorPort = 9999
 
 
 [mitmProxy]
-# 是否开启中间人代理
+# 是否开启中间人代理， 不开启则盲转发
 enabled = true
 # 是否解密HTTPS, 客户端系统需安装根证书
 decryptHTTPS = true

@@ -8,11 +8,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ouqiang/mars/internal/app/inspector"
-
 	log "github.com/sirupsen/logrus"
 
 	"github.com/ouqiang/mars/internal/app/inject"
+	"github.com/ouqiang/mars/internal/app/inspector"
 )
 
 const (
@@ -62,7 +61,7 @@ func (app *App) startProxyServer() {
 
 // 启动流量审查server
 func (app *App) startInspectorServer() {
-	inspector.NewRouter(app.container).Register(http.DefaultServeMux)
+	inspector.NewRouter(app.container, http.DefaultServeMux).Register()
 	addr := app.container.Conf.App.InspectorAddr()
 	server := &http.Server{
 		Addr:         addr,

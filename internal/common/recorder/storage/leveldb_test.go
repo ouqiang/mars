@@ -28,7 +28,7 @@ func TestLevelDB(t *testing.T) {
 	s := NewLevelDB(db, queue)
 
 	tx := recorder.NewTransaction()
-	err = s.Save(tx)
+	err = s.Put(tx)
 	require.NoError(t, err)
 	tx, err = s.Get(tx.Id)
 	require.NoError(t, err)

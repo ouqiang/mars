@@ -1,3 +1,4 @@
+//go:generate statik -src=web/public -dest=internal -f
 // Binary mars HTTP(S)代理
 package main
 

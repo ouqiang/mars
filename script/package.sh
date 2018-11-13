@@ -63,7 +63,7 @@ print_message() {
     echo "$1"
 }
  
-# 打印信息后推出
+# 打印信息后退出
 print_message_and_exit() {
     if [[ -n $1 ]]; then
         print_message "$1"

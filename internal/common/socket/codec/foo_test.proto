@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package codec;
+
+// 测试
+message Foo {
+    string name = 1;
+}

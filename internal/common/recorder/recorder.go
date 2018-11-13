@@ -8,15 +8,13 @@ import (
 	"net/url"
 	"time"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/ouqiang/goproxy"
+	log "github.com/sirupsen/logrus"
 )
 
 // Storage 存取transaction接口
 type Storage interface {
 	Get(txId string) (*Transaction, error)
-	GetBytes(txId string) ([]byte, error)
 	Put(*Transaction) error
 }
 
@@ -68,6 +66,10 @@ func (r *Recorder) SetOutput(o Output) {
 // SetInterceptors 设置拦截器
 func (r *Recorder) SetInterceptors(i []Interceptor) {
 	r.interceptors = i
+}
+
+func (r *Recorder) Storage() Storage {
+	return r.storage
 }
 
 // Connect 收到客户端连接
