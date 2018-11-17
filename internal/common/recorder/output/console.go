@@ -64,8 +64,8 @@ func (c *Console) writeRequest(tx *recorder.Transaction) {
 }
 
 func (c *Console) writeResponse(tx *recorder.Transaction) {
-	if tx.Resp.Err != nil {
-		c.builder.WriteString(tx.Resp.Err.Error())
+	if tx.Resp.Err != "" {
+		c.builder.WriteString(tx.Resp.Err)
 		return
 	}
 	c.builder.WriteString(fmt.Sprintf("\033[32m %s %s \033[0m", tx.Resp.Proto, tx.Resp.Status))

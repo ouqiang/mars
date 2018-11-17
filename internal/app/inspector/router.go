@@ -2,6 +2,7 @@
 package inspector
 
 import (
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -43,5 +44,16 @@ func (r *Router) registerStatic() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	indexFile, err := statikFS.Open("/index.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	indexData, err := ioutil.ReadAll(indexFile)
+	if err != nil {
+		log.Fatal(err)
+	}
 	r.mux.Handle(staticDir, http.StripPrefix(staticDir, http.FileServer(statikFS)))
+	r.mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		rw.Write(indexData)
+	})
 }

@@ -58,6 +58,7 @@ func NewTransaction() *Transaction {
 // DumpRequest 提取request
 func (tx *Transaction) DumpRequest(req *http.Request) {
 	// 设置Accept-Encoding后, http.transport不会自动解压, 需要自己处理
+	// 强制使用gzip
 	if req.Header.Get("Accept-Encoding") != "" {
 		req.Header.Set("Accept-Encoding", "gzip")
 	}
@@ -85,12 +86,13 @@ func (tx *Transaction) DumpRequest(req *http.Request) {
 // DumpRequest 提取response
 func (tx *Transaction) DumpResponse(resp *http.Response, e error) {
 	if e != nil {
-		tx.Resp.Err = e
+		tx.Resp.Err = e.Error()
 		return
 	}
 	tx.Resp.Proto = resp.Proto
 	tx.Resp.Header = goproxy.CloneHeader(resp.Header)
 	tx.Resp.Status = resp.Status
+	tx.Resp.StatusCode = resp.StatusCode
 
 	contentType := getContentType(resp.Header)
 	if !shouldReadBody(contentType) {

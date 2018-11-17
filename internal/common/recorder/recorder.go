@@ -68,6 +68,7 @@ func (r *Recorder) SetInterceptors(i []Interceptor) {
 	r.interceptors = i
 }
 
+// Storage 获取存储
 func (r *Recorder) Storage() Storage {
 	return r.storage
 }

@@ -38,7 +38,6 @@ run-vue:
 	cd web/vue && yarn run dev
 
 statik:
-	go get github.com/rakyll/statik
 	go generate ./...
 
 clean:

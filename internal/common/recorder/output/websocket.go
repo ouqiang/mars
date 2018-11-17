@@ -50,17 +50,18 @@ func (w *WebSocket) OnError(session *socket.Session, err error) {
 // Write Transaction写入WebSocket
 func (w *WebSocket) Write(tx *recorder.Transaction) error {
 	push := &action.PushTransaction{
-		Id:     tx.Id,
-		Method: tx.Req.Method,
-		Scheme: tx.Req.Scheme,
-		Host:   tx.Req.Host,
-		Path:   tx.Req.Path,
-		URL:    tx.Req.URL,
+		Id:       tx.Id,
+		Method:   tx.Req.Method,
+		Host:     tx.Req.Host,
+		Path:     tx.Req.Path,
+		Duration: tx.Duration,
 	}
-	if tx.Resp.Err != nil {
+	if tx.Resp.Err != "" {
 		push.ResponseErr = tx.Resp.Err
 	} else {
-		push.ResponseStatus = tx.Resp.Status
+		push.ResponseContentType = tx.Resp.Body.ContentType
+		push.ResponseStatusCode = tx.Resp.StatusCode
+		push.ResponseLen = tx.Resp.Body.Len
 	}
 	w.broadcast(action.TypePushTransaction, push)
 
@@ -118,8 +119,9 @@ func (w *WebSocket) ping(ctx *socket.Context) {
 func (w *WebSocket) replay(ctx *socket.Context) {
 	req := ctx.Payload.(*action.RequestReplay)
 	err := w.recorder.Replay(req.Id)
-	resp := &action.ResponseReplay{
-		Err: err,
+	resp := &action.ResponseReplay{}
+	if err != nil {
+		resp.Err = err.Error()
 	}
 	w.sendMessage(ctx.Session, action.TypeResponseReplay, resp)
 }
@@ -129,7 +131,9 @@ func (w *WebSocket) getTransaction(ctx *socket.Context) {
 	tx, err := w.recorder.Storage().Get(req.Id)
 	resp := &action.ResponseTransaction{
 		Transaction: tx,
-		Err:         err,
+	}
+	if err != nil {
+		resp.Err = err.Error()
 	}
 	w.sendMessage(ctx.Session, action.TypeResponseTransaction, resp)
 }

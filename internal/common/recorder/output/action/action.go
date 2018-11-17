@@ -1,6 +1,8 @@
 package action
 
 import (
+	"time"
+
 	"github.com/ouqiang/mars/internal/common/recorder"
 	"github.com/ouqiang/mars/internal/common/socket/message"
 )
@@ -25,7 +27,7 @@ type RequestReplay struct {
 }
 
 type ResponseReplay struct {
-	Err error `json:"err"`
+	Err string `json:"err"`
 }
 
 type RequestTransaction struct {
@@ -34,23 +36,25 @@ type RequestTransaction struct {
 
 type ResponseTransaction struct {
 	*recorder.Transaction
-	Err error `json:"err"`
+	Err string `json:"err"`
 }
 
 type PushTransaction struct {
 	Id string `json:"id"`
 	// Method 请求方法
 	Method string `json:"method"`
-	// Scheme 请求协议
-	Scheme string `json:"scheme"`
 	// Host 请求主机名
 	Host string `json:"host"`
 	// Path 请求path
 	Path string `json:"path"`
-	// URL 完整URL
-	URL string `json:"url"`
-	// Status 状态码
-	ResponseStatus string `json:"response_status"`
+	// Duration 耗时
+	Duration time.Duration `json:"duration"`
+	// ResponseStatusCode 响应状态码
+	ResponseStatusCode int `json:"response_status_code"`
 	// Err 错误信息
-	ResponseErr error `json:"response_err"`
+	ResponseErr string `json:"response_err"`
+	// ResponseContentType 响应内容类型
+	ResponseContentType string `json:"response_content_type"`
+	// ResponseLen 响应长度
+	ResponseLen int `json:"response_len"`
 }

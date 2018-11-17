@@ -6,14 +6,16 @@ import "net/http"
 type Response struct {
 	// Proto 响应协议
 	Proto string `json:"proto"`
-	// Status 状态码
+	// Status 状态状态
 	Status string `json:"status"`
+	// StatusCode 响应码
+	StatusCode int `json:"status_code"`
 	// Header 响应Header
 	Header http.Header `json:"header"`
 	// Body 响应Body
 	Body *Body `json:"body"`
 	// Err 错误信息
-	Err error `json:"err"`
+	Err string `json:"err"`
 }
 
 func NewResponse() *Response {

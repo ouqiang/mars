@@ -42,7 +42,7 @@ func NewInspector(sessionHandler socket.SessionHandler, opts []socket.SessionOpt
 func (c *Inspector) WebSocket(resp http.ResponseWriter, req *http.Request) {
 	rawConn, err := upgrader.Upgrade(resp, req, nil)
 	if err != nil {
-		log.Debug("升级到websocket错误: %s", err)
+		log.Debugf("升级到websocket错误: %s", err)
 		return
 	}
 	client := socket.NewSession(
