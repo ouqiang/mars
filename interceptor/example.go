@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	Handler = new(Example)
+	//Handler = new(Example)
 }
 
 type Example struct{}
