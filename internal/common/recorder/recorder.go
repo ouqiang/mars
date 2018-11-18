@@ -35,10 +35,10 @@ type Interceptor interface {
 
 // Recorder 记录http transaction
 type Recorder struct {
-	proxy        *goproxy.Proxy
-	storage      Storage
-	output       Output
-	interceptors []Interceptor
+	proxy       *goproxy.Proxy
+	storage     Storage
+	output      Output
+	interceptor Interceptor
 }
 
 // NewRecorder 创建recorder
@@ -63,9 +63,9 @@ func (r *Recorder) SetOutput(o Output) {
 	r.output = o
 }
 
-// SetInterceptors 设置拦截器
-func (r *Recorder) SetInterceptors(i []Interceptor) {
-	r.interceptors = i
+// SetInterceptor 设置拦截器
+func (r *Recorder) SetInterceptor(i Interceptor) {
+	r.interceptor = i
 }
 
 // Storage 获取存储
@@ -75,10 +75,8 @@ func (r *Recorder) Storage() Storage {
 
 // Connect 收到客户端连接
 func (r *Recorder) Connect(ctx *goproxy.Context, rw http.ResponseWriter) {
-	if len(r.interceptors) > 0 {
-		for _, item := range r.interceptors {
-			item.Connect(ctx, rw)
-		}
+	if r.interceptor != nil {
+		r.interceptor.Connect(ctx, rw)
 	}
 }
 
@@ -87,10 +85,8 @@ func (r *Recorder) Auth(ctx *goproxy.Context, rw http.ResponseWriter) {}
 
 // BeforeRequest 请求发送前处理
 func (r *Recorder) BeforeRequest(ctx *goproxy.Context) {
-	if len(r.interceptors) > 0 {
-		for _, item := range r.interceptors {
-			item.BeforeRequest(ctx)
-		}
+	if r.interceptor != nil {
+		r.interceptor.BeforeRequest(ctx)
 	}
 	tx := NewTransaction()
 	tx.ClientIP, _, _ = net.SplitHostPort(ctx.Req.RemoteAddr)
@@ -110,10 +106,8 @@ func (r *Recorder) BeforeRequest(ctx *goproxy.Context) {
 
 // BeforeResponse 响应发送前处理
 func (r *Recorder) BeforeResponse(ctx *goproxy.Context, resp *http.Response, err error) {
-	if len(r.interceptors) > 0 {
-		for _, item := range r.interceptors {
-			item.BeforeResponse(ctx, resp, err)
-		}
+	if r.interceptor != nil {
+		r.interceptor.BeforeResponse(ctx, resp, err)
 	}
 	tx := ctx.Data["tx"].(*Transaction)
 	tx.Duration = time.Now().Sub(tx.StartTime)

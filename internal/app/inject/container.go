@@ -26,7 +26,7 @@ type Container struct {
 	txStorage            recorder.Storage
 	txRecorder           *recorder.Recorder
 	txOutput             recorder.Output
-	txInterceptors       []recorder.Interceptor
+	txInterceptor        recorder.Interceptor
 }
 
 // NewContainer 创建容器
@@ -49,7 +49,7 @@ func NewContainer(conf *config.Config) *Container {
 	c.txRecorder.SetProxy(c.Proxy)
 	c.txRecorder.SetStorage(c.txStorage)
 	c.txRecorder.SetOutput(c.txOutput)
-	c.txRecorder.SetInterceptors(c.txInterceptors)
+	c.txRecorder.SetInterceptor(c.txInterceptor)
 
 	return c
 }
@@ -95,7 +95,7 @@ func (c *Container) createRecorderOutput() {
 }
 
 func (c *Container) createRecorderInterceptor() {
-	c.txInterceptors = interceptor.Handlers
+	c.txInterceptor = interceptor.Handler
 }
 
 func (c *Container) createWebSocketOutput() {
