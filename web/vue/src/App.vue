@@ -186,6 +186,7 @@ export default {
   },
   created () {
     this.initWebSocket()
+    this.heartBeat()
   },
   destroyed () {
     if (this.timer) {
@@ -218,7 +219,6 @@ export default {
     },
     webSocketOpen () {
       console.log('webSocket连接成功')
-      this.heartBeat()
     },
     webSocketReceive (event) {
       const data = JSON.parse(event.data)
