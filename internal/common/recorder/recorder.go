@@ -180,6 +180,10 @@ func (r *Recorder) DoRequest(req *http.Request) {
 	ctx := &goproxy.Context{
 		Req: req,
 	}
-	r.proxy.DoRequest(ctx, func(resp *http.Response, e error) {})
+	r.proxy.DoRequest(ctx, func(resp *http.Response, e error) {
+		if resp != nil {
+			resp.Body.Close()
+		}
+	})
 	r.Finish(ctx)
 }

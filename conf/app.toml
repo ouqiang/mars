@@ -1,5 +1,4 @@
 [app]
-env = "dev"
 host = "0.0.0.0"
 proxyPort = 8888
 inspectorPort = 9999
@@ -9,7 +8,7 @@ inspectorPort = 9999
 # 是否开启中间人代理， 不开启则盲转发
 enabled = true
 # 是否解密HTTPS, 客户端系统需安装根证书
-decryptHTTPS = true
+decryptHTTPS = false
 # 证书缓存大小
 certCacheSize = 1000
 # 数据缓存大小

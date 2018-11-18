@@ -174,7 +174,7 @@ run() {
     build
     package_binary
     clean
-}t
+}
 
  
 # p 平台 linux darwin windows
@@ -195,4 +195,3 @@ do
 done
  
 run
-
