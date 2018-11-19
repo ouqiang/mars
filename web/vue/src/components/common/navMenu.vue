@@ -39,7 +39,7 @@ export default {
       this.$nextTick(() => {
         const ele = document.getElementById('qrcode')
         ele.innerText = ''
-        let url = location.protocol + '://' + location.host + location.pathname
+        let url = location.protocol + '//' + location.host + location.pathname
         if (url.lastIndexOf('/') !== url.length - 1) {
           url += '/'
         }
