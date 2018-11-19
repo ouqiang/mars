@@ -21,14 +21,15 @@ test-race: enable-race test
 enable-race:
 	$(eval RACE = -race)
 
-package: build-vue statik
+package: 
 	bash ./script/package.sh
 
-package-all: build-vue statik
+package-all: 
 	bash ./script/package.sh -p 'linux darwin windows'
 
 build-vue:
 	cd web/vue && yarn run build
+	rm -rf web/public/static
 	cp -r web/vue/dist/* web/public/
 
 install-vue:

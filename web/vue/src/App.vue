@@ -256,7 +256,7 @@ export default {
       }
     },
     heartBeat () {
-      setInterval(() => {
+      this.timer = setInterval(() => {
         this.requestPing()
       }, 20000)
     },
