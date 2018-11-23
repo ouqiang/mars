@@ -172,8 +172,9 @@ export default {
       timer: null,
       enableCapture: true,
       captureStatusText: 'stop',
-      showMaxTransactionNum: 500,
       transactions: [],
+      pendingTransactions: [],
+      showMaxTransactionNum: 1000,
       dialogVisible: false,
       dialogFullScreen: false,
       activeTab: 'headers',
@@ -187,6 +188,9 @@ export default {
   created () {
     this.initWebSocket()
     this.heartBeat()
+    setInterval(() => {
+      this.publishTransaction()
+    }, 1000)
   },
   destroyed () {
     if (this.timer) {
@@ -310,10 +314,19 @@ export default {
       if (!this.enableCapture) {
         return
       }
-      if (this.transactions.length >= this.showMaxTransactionNum) {
-        this.transactions.pop()
+      this.pendingTransactions.push(payload)
+    },
+    publishTransaction () {
+      if (this.pendingTransactions.length === 0) {
+        return
       }
-      this.transactions.unshift(payload)
+      this.pendingTransactions.forEach((value) => {
+        if (this.transactions.length >= this.showMaxTransactionNum) {
+          this.transactions.pop()
+        }
+        this.transactions.unshift(value)
+      })
+      this.pendingTransactions = []
     },
     toggleCapture () {
       this.enableCapture = !this.enableCapture
