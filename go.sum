@@ -63,6 +63,8 @@ github.com/ouqiang/goproxy v1.0.0 h1:gEKrW0B5EkbqAvx9xFxWnORqJy48UlKzdooTsM8rSRM
 github.com/ouqiang/goproxy v1.0.0/go.mod h1:00lXwAQOblekSEdXG49aF9CR+j+g1D/RURUFo27NBHw=
 github.com/ouqiang/goproxy v1.0.1 h1:P3OObMUC23xOEpZrF48MpGraNlNrqZapjJB4eS5NRHs=
 github.com/ouqiang/goproxy v1.0.1/go.mod h1:00lXwAQOblekSEdXG49aF9CR+j+g1D/RURUFo27NBHw=
+github.com/ouqiang/goproxy v1.0.2 h1:ynOq3H/WOk9vgZH9NNQWH6Z71PqRRx0IuO7Ue0e0V/w=
+github.com/ouqiang/goproxy v1.0.2/go.mod h1:00lXwAQOblekSEdXG49aF9CR+j+g1D/RURUFo27NBHw=
 github.com/ouqiang/goutil v1.0.3 h1:Uz3rrAVzeqyDnvCsyLTIDnPbfQNmRSpesqKpwo6tpR0=
 github.com/ouqiang/goutil v1.0.3/go.mod h1:QrB1Ky4uGqcixxOx55MXweI3IA6nDZ0NtLMXbMfkur4=
 github.com/ouqiang/wire v0.5.1 h1:ro+4gGYJEkKClE6XhTh7pipklEZ7ivC2iydoMN2YCc8=

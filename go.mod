@@ -5,7 +5,7 @@ require (
 	github.com/golang/protobuf v1.2.0
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/gorilla/websocket v1.4.0
-	github.com/ouqiang/goproxy v1.0.1
+	github.com/ouqiang/goproxy v1.0.2
 	github.com/ouqiang/goutil v1.0.3
 	github.com/posener/wstest v0.0.0-20180217133618-28272a7ea048
 	github.com/rakyll/statik v0.1.5
