@@ -1,12 +1,12 @@
 # Mars
 
-HTTP(S)代理服务器, 用于抓包调试
+HTTP(S)代理, 用于抓包调试
 
 功能特性
 ----
 * 作为普通HTTP(S)代理服务器使用
 * 抓包调试, web页面查看流量
-* 流量信息持久化到`leveldb`中, 可用于后期分析
+* 流量持久化到`leveldb`中, 可用于后期分析
 * 拦截请求自定义逻辑
 
 ## 目录
@@ -16,6 +16,9 @@ HTTP(S)代理服务器, 用于抓包调试
     * [源码安装](#源码安装)
 * [配置文件](#配置文件)
 * [命令](#命令)
+* [结合其他程序使用](#结合其他程序使用)
+    * [Nginx](#nginx)
+    * [frp](#frp)
 * [开发](#开发)
     * [服务端](#服务端)
     * [前端](#前端)
@@ -97,6 +100,43 @@ Flags:
 * `make package` 生成当前平台的压缩包
 * `make package-all` 生成Windows、Linux、Mac的压缩包
 
+
+## 结合其他程序使用
+
+经过`mars`的流量可在web页查看
+
+### Nginx
+请求包含特定header, 则转发给`mars`
+```ini
+ proxy_set_header X-Mars-Debug 0;
+ proxy_set_header Host $http_host;
+ if ($http_x_mars_debug = "1") {
+   proxy_pass http://localhost:8888;
+ }
+```
+
+### frp
+
+原配置
+
+```ini
+[web]
+type = http
+local_ip = 127.0.0.1
+local_port = 80
+subdomain = test
+```
+
+使用`mars`后的配置
+
+```ini
+[web]
+type = http
+local_ip = 127.0.0.1
+local_port = 8888
+subdomain = test
+host_header_rewrite = 127.0.0.1:80
+```
 
 ## 开发
 

@@ -378,7 +378,8 @@ export default {
         case 'text/plain':
         case 'text/xml':
         case 'application/xml':
-          if (content.indexOf('{') === 0 && content.lastIndexOf('}') === content.length - 1) {
+          const trimContent = this.trim(content)
+          if (trimContent.indexOf('{') === 0 && trimContent.lastIndexOf('}') === trimContent.length - 1) {
             content = BeautifyJs(content)
           } else {
             content = BeautifyHtml(content)
@@ -396,6 +397,9 @@ export default {
       }
 
       return content
+    },
+    trim (str) {
+      return str.replace(/(^\s*)|(\s*$)/g, '')
     }
   },
   filters: {

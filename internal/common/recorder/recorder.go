@@ -85,6 +85,10 @@ func (r *Recorder) Auth(ctx *goproxy.Context, rw http.ResponseWriter) {}
 
 // BeforeRequest 请求发送前处理
 func (r *Recorder) BeforeRequest(ctx *goproxy.Context) {
+	if host := ctx.Req.Header.Get("X-Mars-Host"); host != "" {
+		ctx.Req.Host = host
+	}
+	ctx.Req.Header.Del("X-Mars-Debug")
 	if r.interceptor != nil {
 		r.interceptor.BeforeRequest(ctx)
 	}
