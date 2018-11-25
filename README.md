@@ -106,12 +106,26 @@ Flags:
 经过`mars`的流量可在web页查看
 
 ### Nginx
-请求包含特定header, 则转发给`mars`
-```ini
- proxy_set_header X-Mars-Debug 0;
- proxy_set_header Host $http_host;
+请求包含特定header, 则转发给`mars`, 由`mars`访问实际的后端
+
+原配置
+```nginx
+proxy_pass http://172.16.10.103:8080;
+```
+
+使用`mars`后的配置
+```nginx
+ set $targetHost $host;
+
+ if ($http_x_mars_debug = "1") {
+   set $targetHost "172.16.10.103:8080";
+ }
+
+ proxy_set_header X-Mars-Host $host;
+ proxy_set_header Host $targetHost;
  if ($http_x_mars_debug = "1") {
    proxy_pass http://localhost:8888;
+   break;
  }
 ```
 
