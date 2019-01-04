@@ -1,6 +1,9 @@
-# Mars
+# Mars - HTTP(S)代理, 用于抓包调试
 
-HTTP(S)代理, 用于抓包调试
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/ouqiang/mars/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/release/ouqiang/mars.svg?label=Release)](https://github.com/ouqiang/mars/releases)
+
+
 
 功能特性
 ----
@@ -8,6 +11,15 @@ HTTP(S)代理, 用于抓包调试
 * 抓包调试, web页面查看流量
 * 流量持久化到`leveldb`中, 可用于后期分析
 * 拦截请求自定义逻辑
+
+
+截图
+---
+
+![列表](https://raw.githubusercontent.com/ouqiang/mars/master/screenshot/list.png)
+![详情](https://raw.githubusercontent.com/ouqiang/mars/master/screenshot/detail.png)
+
+
 
 ## 目录
 
@@ -82,7 +94,7 @@ Git Commit: 2151a6d
 ### 命令行参数
 ```bash
 $ ./mars server -h
-run http server
+run proxy server
 
 Usage:
   mars server [flags]
@@ -92,13 +104,6 @@ Flags:
   -e, --env string          dev | prod (default "prod")
   -h, --help                help for server
 ```
-
-### make
-
-* `make` 编译
-* `make run` 编译并运行
-* `make package` 生成当前平台的压缩包
-* `make package-all` 生成Windows、Linux、Mac的压缩包
 
 
 ## 结合其他程序使用
@@ -124,7 +129,7 @@ proxy_pass http://172.16.10.103:8080;
  proxy_set_header X-Mars-Host $host;
  proxy_set_header Host $targetHost;
  if ($http_x_mars_debug = "1") {
-   proxy_pass http://localhost:8888;
+   proxy_pass http://127.0.0.1:8888;
    break;
  }
 ```
@@ -191,6 +196,14 @@ type Output interface {
 	Write(*Transaction) error
 }
 ```
+
+### make
+
+* `make` 编译
+* `make run` 编译并运行
+* `make package` 生成当前平台的压缩包
+* `make package-all` 生成Windows、Linux、Mac的压缩包
+
 
 ## 前端
 

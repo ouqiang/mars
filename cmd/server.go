@@ -23,7 +23,7 @@ const (
 
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "run http server",
+	Short: "run proxy server",
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Info(version.Format())
 		viper.BindPFlags(cmd.Flags())

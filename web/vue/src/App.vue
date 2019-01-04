@@ -190,7 +190,7 @@ export default {
     this.heartBeat()
     setInterval(() => {
       this.publishTransaction()
-    }, 1000)
+    }, 500)
   },
   destroyed () {
     if (this.timer) {
