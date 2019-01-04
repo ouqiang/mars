@@ -1,6 +1,6 @@
 # Mars - HTTP(S)代理, 用于抓包调试
 
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/ouqiang/mars/blob/master/LICENSE)
+[![license](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://github.com/ouqiang/mars/blob/master/LICENSE)
 [![Release](https://img.shields.io/github/release/ouqiang/mars.svg?label=Release)](https://github.com/ouqiang/mars/releases)
 
 
@@ -23,6 +23,7 @@
 
 ## 目录
 
+* [下载](#下载)
 * [安装](#安装)
     * [二进制安装](#二进制安装)
     * [源码安装](#源码安装)
@@ -37,7 +38,12 @@
         * [基于已有代码开发](#基于已有代码开发)
         * [自定义实现](#自定义实现)
 
+## 下载
+
+[releases](https://github.com/ouqiang/mars/releases)
+
 ## 安装
+
 
 ### 二进制安装
 1. 解压压缩包
