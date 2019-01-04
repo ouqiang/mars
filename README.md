@@ -46,6 +46,14 @@
 4. 查看流量web页: http://localhost:9999, 客户端可扫描二维码下载根证书
 
 
+### docker
+
+```bash
+docker run --name mars -p 8888:8888 -p 9999:9999 -d ouqg/mars:1.0.0
+```
+
+配置: /app/conf/app.toml
+
 ### 源码安装
 Go版本1.11+
 启用go module
